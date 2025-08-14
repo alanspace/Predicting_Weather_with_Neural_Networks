@@ -72,6 +72,7 @@ A key focus of this project is to move beyond simple accuracy as an evaluation m
   - `Meteostat` for programmatic weather data acquisition in the verification script.
   - `joblib` for saving/loading trained models.
 
+```
 ---
 
 ## Setup and Installation
