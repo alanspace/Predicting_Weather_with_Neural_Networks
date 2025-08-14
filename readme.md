@@ -1,14 +1,15 @@
-# Predicting Rainfall in Perth with a Neural Network
+# Predicting Next-Day Rainfall in Perth using a Neural Network
 
-This data science project demonstrates a complete, end-to-end machine learning workflow for predicting whether it will rain the next day in Perth, Australia. The project uses a neural network (Multi-layer Perceptron) and focuses on best practices, including detailed data pre-processing, robust feature engineering, in-depth model evaluation, and hyperparameter tuning.
+This repository contains a complete, end-to-end data science project focused on predicting whether it will rain the next day in Perth, Australia. It utilizes a neural network (Multi-layer Perceptron) and demonstrates a robust, best-practice machine learning workflow from data cleaning and feature engineering to model optimization and real-world application.
 
-The entire analysis is contained within the `predicting_weather.ipynb` Jupyter Notebook.
+The primary analysis is conducted in the `Weather_Prediction_Perth.ipynb` Jupyter Notebook. The repository also includes scripts to demonstrate how the trained model can be operationalized for day-ahead forecasting and verification.
 
 ---
 
 ## Table of Contents
 * [Project Overview](#project-overview)
-* [Key Features](#key-features)
+* [Key Features & Skills Demonstrated](#key-features--skills-demonstrated)
+* [Repository Structure](#repository-structure)
 * [Technologies Used](#technologies-used)
 * [Setup and Installation](#setup-and-installation)
 * [Usage](#usage)
@@ -22,24 +23,42 @@ The entire analysis is contained within the `predicting_weather.ipynb` Jupyter N
 
 ## Project Overview
 
-The goal of this project is to build a binary classification model that accurately predicts `RainTomorrow`. The analysis begins with raw weather data from Perth, proceeds through a rigorous cleaning and feature engineering phase, and culminates in the training and comparative evaluation of two neural network models.
+The objective of this project is to build and evaluate a binary classification model to accurately predict `RainTomorrow`. The process starts with a raw weather dataset, proceeds through a rigorous cleaning and feature engineering phase, and culminates in the training, optimization, and comparative evaluation of two neural network models.
 
-A key focus of this project is to move beyond simple accuracy and perform a nuanced evaluation that considers the real-world implications of different types of prediction errors, especially in the context of an imbalanced dataset.
+A key focus of this project is to move beyond simple accuracy as an evaluation metric. By analyzing the class imbalance of the dataset, we demonstrate the importance of using a **Confusion Matrix**, **Precision**, **Recall**, and **F1-Score** to understand the model's real-world performance and the trade-offs between different types of prediction errors.
+
+---
+
+## Key Features & Skills Demonstrated
+
+-   **Data Scoping & Cleaning:** Justification and execution of data scoping to a single location (Perth) and removal of irrelevant or data-leaking features.
+-   **Robust Missing Data Handling:** Implementation of `SimpleImputer` to handle missing values, with a careful methodology to prevent data leakage from the test set.
+-   **Advanced Feature Engineering:**
+    -   Conversion of boolean features to a binary format.
+    -   Application of a **sine/cosine transformation** to cyclical features (wind direction) to correctly represent their cyclical nature to the model.
+-   **In-depth Model Evaluation:** Detailed analysis of model performance on an imbalanced dataset, moving beyond accuracy to a nuanced interpretation of precision-recall trade-offs.
+-   **Hyperparameter Tuning:** Use of `GridSearchCV` to systematically search for an optimal neural network architecture and compare its performance against a baseline model.
+-   **Model Operationalization:** The project includes scripts that demonstrate how to:
+    -   Save a fully trained pipeline (model, imputer, and scaler).
+    -   Load the pipeline to make predictions on new, unseen data.
+    -   Verify a past prediction against real-world historical data fetched programmatically.
 
 ---
 
-## Key Features
+## Repository Structure
 
-- **Detailed Data Pre-processing:** Includes scoping the dataset to a single location for a specialized model and removing irrelevant or data-leaking features.
-- **Robust Missing Data Handling:** Uses `SimpleImputer` to handle missing values, preserving the dataset's size and integrity while carefully avoiding data leakage.
-- **Advanced Feature Engineering:**
-  - Converts boolean features to a binary format.
-  - Applies a **sin/cos transformation** to cyclical features (wind direction) to preserve their cyclical nature for the model.
-- **In-depth Model Evaluation:** Moves beyond accuracy to use a **Confusion Matrix** and **Classification Report** (calculating Precision, Recall, and F1-Score), which are critical for imbalanced datasets.
-- **Hyperparameter Tuning:** Employs `GridSearchCV` to systematically search for an optimal neural network architecture, comparing its performance to an initial baseline model.
-- **Clear Documentation:** The Jupyter Notebook is structured with detailed markdown cells that explain the "why" behind each step of the process.
-
----
+```/perth-weather-prediction/
+│
+├── .gitignore
+├── README.md                 # This README file
+├── requirements.txt            # Python dependencies for the project
+├── weatherPerth.csv            # The raw dataset used for training
+├── Weather_Prediction_Perth.ipynb  # The main Jupyter Notebook with the full analysis
+├── predict.py                  # Script to make a day-ahead forecast using the trained model
+├── verify_prediction.py        # Script to verify a past prediction with historical data
+├── weather_model.pkl           # Saved trained model (generated by the notebook)
+├── weather_imputer.pkl         # Saved imputer (generated by the notebook)
+└── weather_scaler.pkl          # Saved scaler (generated by the notebook)
 
 ## Technologies Used
 
@@ -50,6 +69,8 @@ A key focus of this project is to move beyond simple accuracy and perform a nuan
   - `scikit-learn` for machine learning tasks (data splitting, imputation, scaling, modeling, and evaluation).
   - `matplotlib` for data visualization.
   - `Jupyter Notebook` for interactive development and analysis.
+  - `Meteostat` for programmatic weather data acquisition in the verification script.
+  - `joblib` for saving/loading trained models.
 
 ---
 
@@ -80,62 +101,46 @@ To run this project locally, please follow these steps:
 
 ## Usage
 
-1.  Activate the virtual environment.
-2.  Launch the Jupyter Notebook server:
-    ```bash
-    jupyter lab
-    ```
-3.  Open the `predicting_weather.ipynb` notebook and run the cells sequentially to reproduce the analysis.
+1. Train the Model: The first step is to run the main analysis notebook. This will also generate the `.pkl` files required by the prediction scripts.
+
+ - Launch Jupyter Lab: jupyter lab
+ - Open `Weather_Prediction_Perth.ipynb` and run all cells.
+
+2. Make a Prediction: To see how the model makes a forecast for a given day's weather, run the predict.py script.
+
+`python predict.py`
+
+3. Verify the Historical Prediction: To check the model's prediction for June 26, 2017, against real historical data, run the verify_prediction.py script.
+
+`python verify_prediction.py`
 
 ---
-
 ## Project Workflow
+The notebook follows a structured, end-to-end methodology:
 
-The notebook follows a structured, end-to-end machine learning methodology:
-
-1.  **Data Loading and Scoping:** The dataset is loaded and filtered to focus solely on the 'Perth' location to build a specialized model.
-2.  **Pre-processing:** Unnecessary columns (`Date`, `RISK_MM`, `Location`) are removed.
-3.  **Feature Engineering:** Boolean features (`RainToday`) are converted to 0/1, and cyclical features (`WindGustDir`, `WindDir9am`, `WindDir3pm`) are transformed into sine and cosine components to preserve their spatial relationships.
-4.  **Data Splitting:** The data is split into training and testing sets *before* any imputation or scaling to prevent data leakage.
-5.  **Imputation:** `SimpleImputer` is used to fill missing values, fitting only on the training data and transforming both train and test sets.
-6.  **Scaling:** Features are scaled using `StandardScaler` to ensure the neural network treats all features equally regardless of their original scale.
-7.  **Initial Modeling:** A baseline neural network with a `(50,50)` hidden layer architecture is trained and evaluated in detail.
-8.  **Model Optimization:** `GridSearchCV` is used to test several different network architectures (`(2,)`, `(10,)`, `(50,50)`) and identify the best-performing one based on cross-validation.
-9.  **Comparative Analysis:** The performance of the best model found by the grid search is compared against the initial baseline model using a full suite of classification metrics.
-
----
+1. Data Loading and Scoping: The dataset is loaded and filtered to focus on 'Perth'.
+2. Pre-processing & Feature Engineering: Data is cleaned, and features are transformed (booleans to binary, wind direction to sin/cos).
+3. Data Splitting: The data is split into training and testing sets before imputation or scaling to prevent data leakage.
+4. Imputation & Scaling: Missing values are handled with SimpleImputer, and features are scaled with StandardScaler, both fitted only on the training data.
+5. Initial Modeling: A baseline neural network with a (50,50) hidden layer architecture is trained and evaluated in detail.
+6. Model Optimization: GridSearchCV is used to find a more optimal, simpler architecture.
+7. Comparative Analysis: The performance of the best model is compared against the baseline, focusing on the precision-recall trade-off.
 
 ## Results and Analysis
+The analysis produced two well-performing models with different strengths. The overall accuracy of both models was nearly identical (~89%), highlighting that accuracy is a poor metric for this imbalanced problem. The key findings were in the trade-offs:
 
-The analysis yielded two key models with distinct performance characteristics on the test set:
-
--   **Initial Model `(50, 50)`:** A more complex model that proved to be better at correctly identifying rain events when they occurred (**higher recall** of 0.715).
--   **Optimized Model `(2,)`:** A much simpler model found via `GridSearchCV` that was more precise. When it predicted rain, it was correct more often (**higher precision** of 0.773).
-
-The overall accuracy of both models was nearly identical (~89%), proving that accuracy is a misleading metric for this imbalanced dataset. The true difference lay in the **precision-recall trade-off**.
-
----
+ - Initial Model (50, 50): This more complex model was better at catching rain events when they occurred (higher recall).
+ - Optimized Model (2,): This simpler model was more cautious. When it predicted rain, it was more likely to be correct (higher precision).
 
 ## Conclusion
+The "best" model depends on the real-world application. For a use case where missing a rain event is costly (e.g., a farmer needing to protect crops), the initial model is preferable. For a use case where false alarms are costly (e.g., cancelling an outdoor event unnecessarily), the optimized model is better.
 
-The "best" model depends entirely on the business context and the cost of different errors:
-
--   For a use case where **missing a rain event is costly** (e.g., a concert organizer), the initial `(50, 50)` model with its higher recall is preferable.
--   For a use case where **falsely predicting rain is costly** (e.g., an automated irrigation system that shouldn't waste water), the optimized `(2,)` model with its higher precision is the better choice.
-
-This project successfully demonstrates that effective data science is not just about building a model, but about deeply understanding its performance and translating those statistical metrics into actionable, context-driven insights.
-
----
+This project successfully demonstrates a complete workflow, from raw data to an operationalized and verified model, with a focus on the critical thinking required to interpret and choose models based on context.
 
 ## Future Improvements
-
--   **Experiment with other imputation strategies** (e.g., `KNNImputer` or `median` strategy) to see if it impacts model performance.
--   **Compare with other model types**, such as Logistic Regression, Gradient Boosting Machines (like XGBoost or LightGBM), which often perform very well on tabular data.
--   **Address class imbalance directly** using techniques like SMOTE (Synthetic Minority Over-sampling Technique) or by adjusting `class_weight` in the model parameters.
--   **Advanced Feature Engineering** by extracting cyclical features from the `Date` column (e.g., month, day of the year).
-
----
+Generalize the Workflow: Apply this robust pipeline to predict weather in different climates (e.g., a cold climate like Stockholm or a tropical one like Hong Kong) and compare the results.
+Try Other Models: Compare the neural network's performance against other powerful algorithms like XGBoost or LightGBM, which often excel on tabular data.
+Address Class Imbalance: Experiment with techniques like SMOTE (Synthetic Minority Over-sampling Technique) to see if it improves the model's ability to predict the rare "Rain" class.
 
 ## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the MIT License.
