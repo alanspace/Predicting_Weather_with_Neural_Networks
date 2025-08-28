@@ -23,7 +23,7 @@ The primary analysis is conducted in the `Weather_Prediction_Perth.ipynb` Jupyte
 
 ## Project Overview
 
-The objective of this project is to build and evaluate a binary classification model to accurately predict `RainTomorrow`. The process starts with a raw weather dataset, proceeds through a rigorous cleaning and feature engineering phase, and culminates in the training, optimization, and comparative evaluation of two neural network models.
+This project develops and evaluates a binary classification model to accurately predict 'RainTomorrow' in Perth, Australia. It demonstrates an end-to-end machine learning workflow, from raw data processing and feature engineering to neural network training, optimization, and comparative evaluation.
 
 A key focus of this project is to move beyond simple accuracy as an evaluation metric. By analyzing the class imbalance of the dataset, we demonstrate the importance of using a **Confusion Matrix**, **Precision**, **Recall**, and **F1-Score** to understand the model's real-world performance and the trade-offs between different types of prediction errors.
 
@@ -36,7 +36,7 @@ A key focus of this project is to move beyond simple accuracy as an evaluation m
 -   **Advanced Feature Engineering:**
     -   Conversion of boolean features to a binary format.
     -   Application of a **sine/cosine transformation** to cyclical features (wind direction) to correctly represent their cyclical nature to the model.
--   **In-depth Model Evaluation:** Detailed analysis of model performance on an imbalanced dataset, moving beyond accuracy to a nuanced interpretation of precision-recall trade-offs.
+-   **In-depth Model Evaluation: Detailed analysis of model performance on an imbalanced dataset, moving beyond simple accuracy to a nuanced interpretation of precision-recall trade-offs.
 -   **Hyperparameter Tuning:** Use of `GridSearchCV` to systematically search for an optimal neural network architecture and compare its performance against a baseline model.
 -   **Model Operationalization:** The project includes scripts that demonstrate how to:
     -   Save a fully trained pipeline (model, imputer, and scaler).
@@ -96,7 +96,7 @@ To run this project locally, please follow these steps:
     ```bash
     pip install -r requirements.txt
     ```
-    *(If a `requirements.txt` file is not available, install the libraries manually: `pip install numpy pandas scikit-learn matplotlib jupyterlab`)*
+    *(If `requirements.txt` is not available or if you prefer manual installation, install the core libraries: `pip install numpy pandas scikit-learn matplotlib jupyterlab`)*
 
 ---
 
@@ -130,8 +130,8 @@ The notebook follows a structured, end-to-end methodology:
 ## Results and Analysis
 The analysis produced two well-performing models with different strengths. The overall accuracy of both models was nearly identical (~89%), highlighting that accuracy is a poor metric for this imbalanced problem. The key findings were in the trade-offs:
 
- - Initial Model (50, 50): This more complex model was better at catching rain events when they occurred (higher recall).
- - Optimized Model (2,): This simpler model was more cautious. When it predicted rain, it was more likely to be correct (higher precision).
+- Initial Model (50, 50): This more complex model was better at catching rain events when they occurred (**higher recall**).
+- Optimized Model (2,): This simpler model was more cautious. When it predicted rain, it was more likely to be correct (**higher precision**).
 
 ## Conclusion
 The "best" model depends on the real-world application. For a use case where missing a rain event is costly (e.g., a farmer needing to protect crops), the initial model is preferable. For a use case where false alarms are costly (e.g., cancelling an outdoor event unnecessarily), the optimized model is better.
